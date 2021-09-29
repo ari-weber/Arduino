@@ -2,14 +2,18 @@
 
 #define joyX A0
 #define joyY A1
-const int SWPin  = 4; //SW NOT WORKING
+
+#define potPin A2
+
+const int SWPin  = 4;        //Switch not working
 const int buttonPin = 2;     // the number of the pushbutton pin
 
 Servo xServo;
 Servo yServo;
 
+int potVal = 0;
 int xValue, yValue, xMap, yMap;
-int RANGE = 50;
+int RANGE;
 int buttonState = 0;         // variable for reading the pushbutton status
 int SW = 0;
 
@@ -19,12 +23,15 @@ void setup() {
   yServo.attach(9);
   pinMode(buttonPin, INPUT);
   pinMode(SWPin, INPUT);
+  RANGE = 1;
 }
 
 void loop(){
   buttonState = digitalRead(buttonPin);
   SW = digitalRead(SWPin);
-  if(buttonState == HIGH || SW == HIGH){
+  potVal = analogRead(potPin);
+  RANGE = map(potVal, 0, 1000, 10, 100);
+  if(SW == HIGH){
     JoystickLoop();
   }else{
    RandLoop(); 
